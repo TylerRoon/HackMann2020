@@ -1,4 +1,4 @@
-package com.tylerroonprapunt.Planet;
+package XClassProjects.src.com.tylerroonprapunt.Planet;
 
 public class Vector {
     private double magnitude;

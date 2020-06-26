@@ -10,15 +10,16 @@ import org.opensourcephysics.frames.PlotFrame;
 import java.util.ArrayList;
 
 public class Orbits extends AbstractSimulation {
-    PlotFrame space = new PlotFrame("x","y", "Orbit Simulation");
+    public PlotFrame space = new PlotFrame("x","y", "Orbit Simulation");
 
     Circle circle1 = new Circle();
     Circle circle2 = new Circle();
 
-    static double G = 6.67*Math.pow(10,-11);
-    double timestep;
+    public static double G = 6.67*Math.pow(10,-11);
+    public double timestep;
+    public static boolean updateGraph;
 
-    ArrayList<Planet> planets = new ArrayList<Planet>();
+    public ArrayList<Planet> planets = new ArrayList<Planet>();
 
     @Override
     public void reset() {
@@ -32,21 +33,31 @@ public class Orbits extends AbstractSimulation {
         timestep = 2000;
     }
     public void doStep() {
-        ///set FG
-        for (int i = 0; i < planets.size(); i++) { //planet in question
-            Vector sum = new Vector(0,0);
-            for (int j = 0; j < planets.size(); j++) { //planet in relation
-                if (i == j) { }
-                else {
-                    Vector holder = fg(planets.get(i),planets.get(j));
-                    sum = sum.plus(holder);
+        for(int n = 0; n < 10; n++) {
+            if(n == 0){
+                updateGraph = true;
+            }else if (n == 1){
+                updateGraph = false;
+            }else{}
+            ///set FG
+            for (int i = 0; i < planets.size(); i++) { //planet in question
+                Vector sum = new Vector(0, 0);
+                for (int j = 0; j < planets.size(); j++) { //planet in relation
+                    if (i == j) {
+                    } else {
+                        Vector holder = fg(planets.get(i), planets.get(j));
+                        sum = sum.plus(holder);
+                    }
                 }
+                planets.get(i).setAppliedFg(sum);
+                sum.setTheta(0);
+                sum.setMagnitude(0);
             }
-            planets.get(i).setAppliedFg(sum);
-            sum.setTheta(0);
-            sum.setMagnitude(0);
+            //update XY
+            for (int i = 0; i < planets.size(); i++) {
+                
+            }
         }
-
     }
     @Override
     public void stop() { }

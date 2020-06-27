@@ -39,7 +39,7 @@ public class Orbits extends AbstractSimulation {
     @Override
     public void initialize() {
         planets.add(new Planet(0, 0, 0.5*Math.pow(10,5),new Vector(0,Math.PI/2,true), new Circle(control.getDouble("Starting X0"), control.getDouble("Starting Y0"))));
-        planets.add(new Planet(0, 0, -0.5*Math.pow(10,5),new Vector(0,Math.PI/2,true), new Circle(control.getDouble("Starting X1"), control.getDouble("Starting Y1"))));
+        planets.add(new Planet(0, 0, -0.5*Math.pow(10,5),new Vector(30000,Math.PI/2,true), new Circle(control.getDouble("Starting X1"), control.getDouble("Starting Y1"))));
         //planets.add(new Planet(0, 1*Math.pow(10,4), 0,new Vector(3,Math.PI,true), new Circle(control.getDouble("Starting X2"), control.getDouble("Starting Y2"))));
 
         planets.get(0).setMass(control.getDouble("Mass 0"));
@@ -59,7 +59,7 @@ public class Orbits extends AbstractSimulation {
             space.addDrawable(planets.get(i).getCircle());
         }
 
-        timestep = 200;
+        timestep = 20000;
     }
     public void doStep() {
         for(int n = 0; n < 10; n++) {
@@ -74,7 +74,6 @@ public class Orbits extends AbstractSimulation {
                 for (int j = 0; j < planets.size(); j++) { //planet in relation
                     if (i == j) {
                     } else {
-                        System.out.println(sum.plus(fg(planets.get(i), planets.get(j))));
                         sum = sum.plus(fg(planets.get(i), planets.get(j)));
                     }
                 }
@@ -85,13 +84,15 @@ public class Orbits extends AbstractSimulation {
             //update XY
             for (int i = 0; i < planets.size(); i++) {
                 Planet currentPlanet = planets.get(i);
-                Vector vt = currentPlanet.getVelo().plus(new Vector((currentPlanet.getAppliedFg().getMagnitude() * timestep)/currentPlanet.getMass(), currentPlanet.getAppliedFg().getTheta(), true));
-                if(updateGraph){
-                    currentPlanet.visSetXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);
-                }else{
-                    currentPlanet.setXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);
-                }
-                currentPlanet.velo = vt.clone();
+                Vector a = new Vector((currentPlanet.getAppliedFg().getMagnitude())/currentPlanet.getMass(),currentPlanet.getAppliedFg().getTheta(), true);
+                currentPlanet.setVelo(new Vector(currentPlanet.getVelo().clone().getX() + a.getX()*timestep, currentPlanet.getVelo().clone().getY() + a.getY()*timestep));
+                //currentPlanet.setXY(currentPlanet.getX() + currentPlanet.getVelo().getX()*timestep,currentPlanet.getY() + currentPlanet.getVelo().getY()*timestep);
+                currentPlanet.visSetXY(currentPlanet.getX() + currentPlanet.getVelo().getX()*timestep,currentPlanet.getY() + currentPlanet.getVelo().getY()*timestep);
+
+                //Vector vt = currentPlanet.getVelo().plus(new Vector((currentPlanet.getAppliedFg().getMagnitude() * timestep)/currentPlanet.getMass(), currentPlanet.getAppliedFg().getTheta(), true));
+                    //currentPlanet.visSetXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);
+                    //currentPlanet.setXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);
+                //currentPlanet.velo = vt.clone();
             }
             System.out.println(planets.get(1).toString());
         }
@@ -106,9 +107,9 @@ public class Orbits extends AbstractSimulation {
     public static Vector fg(Planet planetI, Planet planetJ) {
         double magnitude;
         if (planetI.getX()<planetJ.getX()){
-             magnitude = G*planetI.getMass()*planetJ.getMass()/distance(planetI,planetJ);
+             magnitude = G*planetI.getMass()*planetJ.getMass()/(distance(planetI,planetJ)*distance(planetI,planetJ));
         }else{
-            magnitude = -G*planetI.getMass()*planetJ.getMass()/distance(planetI,planetJ);
+            magnitude = -G*planetI.getMass()*planetJ.getMass()/(distance(planetI,planetJ)*distance(planetI,planetJ));
         }
         double theta;
         if(planetI.getX()!= planetJ.getX()) {

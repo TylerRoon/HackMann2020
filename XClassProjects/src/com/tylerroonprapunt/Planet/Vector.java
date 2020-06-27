@@ -9,11 +9,10 @@ public class Vector {
         }else {
             this.setMagnitude(-Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));
         }
-
         if (x != 0){
             this.setTheta(simplifyAngle(Math.atan(y/x)));
         }else {
-            this.setTheta(0);
+            this.setTheta(Math.PI/2);
         }
     }
     public Vector (double magnitude, double theta, boolean angle) {

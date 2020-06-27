@@ -40,8 +40,8 @@ public class Orbits extends AbstractSimulation {
                 updateGraph = false;
             }else{}
             ///set FG
+            Vector sum = new Vector(0, 0);
             for (int i = 0; i < planets.size(); i++) { //planet in question
-                Vector sum = new Vector(0, 0);
                 for (int j = 0; j < planets.size(); j++) { //planet in relation
                     if (i == j) {
                     } else {
@@ -55,7 +55,14 @@ public class Orbits extends AbstractSimulation {
             }
             //update XY
             for (int i = 0; i < planets.size(); i++) {
-                
+                Planet currentPlanet = planets.get(i);
+                Vector vt = currentPlanet.getVelo().plus(new Vector((currentPlanet.getAppliedFg().getMagnitude() * timestep)/currentPlanet.getMass(), currentPlanet.getAppliedFg().getTheta(), true));
+                if(updateGraph){
+                    currentPlanet.visSetXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);
+                }else{
+                    currentPlanet.setXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);
+                }
+                currentPlanet.velo = vt.clone();
             }
         }
     }

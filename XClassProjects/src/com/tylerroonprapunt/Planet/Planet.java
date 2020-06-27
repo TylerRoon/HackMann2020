@@ -7,7 +7,7 @@ public class Planet {
     private double mass;
     private double x;
     private double y;
-    private Vector velo;
+    public Vector velo;
     private Vector appliedFg;
     private Circle circle;
 

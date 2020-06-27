@@ -4,8 +4,12 @@ public class Vector {
     private double magnitude;
     private double theta;
     public Vector (double x, double y) {
+        if( x > 0){
+            this.setMagnitude(Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));
+        }else {
+            this.setMagnitude(-Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));
+        }
 
-        this.setMagnitude(Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));
         if (x != 0){
             this.setTheta(simplifyAngle(Math.atan(y/x)));
         }else {
@@ -65,6 +69,8 @@ public class Vector {
         String info = "";
         info = info + "Mag: " + this.getMagnitude() + "\n";
         info = info + "The: " + this.getTheta() + "\n";
+        info = info + "X: " + this.getX() + "\n";
+        info = info + "Y: " + this.getY() + "\n";
         return info;
     }
 }

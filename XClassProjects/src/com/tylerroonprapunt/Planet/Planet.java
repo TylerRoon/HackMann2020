@@ -54,7 +54,7 @@ public class Planet {
         info = info + "y: " + this.getY() + "\n";
         info = info + "m: " + this.getMass() + "\n";
         info = info + "Velo:";
-        info = info + this.getVelo().toString() + "\n";
+        info = info + this.getVelo().toString();
         info = info + "Fg: ";
         info = info + this.getAppliedFg().toString() + "\n";
         return info;

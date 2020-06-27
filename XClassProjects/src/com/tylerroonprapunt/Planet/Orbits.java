@@ -39,7 +39,7 @@ public class Orbits extends AbstractSimulation {
     @Override
     public void initialize() {
         planets.add(new Planet(0, 0, 0.5*Math.pow(10,5),new Vector(0,Math.PI/2,true), new Circle(control.getDouble("Starting X0"), control.getDouble("Starting Y0"))));
-        planets.add(new Planet(0, 0, -0.5*Math.pow(10,5),new Vector(36433,Math.PI/2,true), new Circle(control.getDouble("Starting X1"), control.getDouble("Starting Y1"))));
+        planets.add(new Planet(0, 0, -0.5*Math.pow(10,5),new Vector(0,Math.PI/2,true), new Circle(control.getDouble("Starting X1"), control.getDouble("Starting Y1"))));
         //planets.add(new Planet(0, 1*Math.pow(10,4), 0,new Vector(3,Math.PI,true), new Circle(control.getDouble("Starting X2"), control.getDouble("Starting Y2"))));
 
         planets.get(0).setMass(control.getDouble("Mass 0"));
@@ -74,6 +74,7 @@ public class Orbits extends AbstractSimulation {
                 for (int j = 0; j < planets.size(); j++) { //planet in relation
                     if (i == j) {
                     } else {
+                        System.out.println(sum.plus(fg(planets.get(i), planets.get(j))));
                         sum = sum.plus(fg(planets.get(i), planets.get(j)));
                     }
                 }
@@ -92,7 +93,7 @@ public class Orbits extends AbstractSimulation {
                 }
                 currentPlanet.velo = vt.clone();
             }
-            System.out.println(planets.get(0).toString());
+            System.out.println(planets.get(1).toString());
         }
     }
     @Override
@@ -103,9 +104,19 @@ public class Orbits extends AbstractSimulation {
 
 
     public static Vector fg(Planet planetI, Planet planetJ) {
-        double magnitude = G*planetI.getMass()*planetJ.getMass()/distance(planetI,planetJ);
-        double theta = Math.atan((planetI.getY()-planetJ.getY())/(planetI.getX()-planetJ.getX()));
-        Vector result = new Vector(magnitude, theta);
+        double magnitude;
+        if (planetI.getX()<planetJ.getX()){
+             magnitude = G*planetI.getMass()*planetJ.getMass()/distance(planetI,planetJ);
+        }else{
+            magnitude = -G*planetI.getMass()*planetJ.getMass()/distance(planetI,planetJ);
+        }
+        double theta;
+        if(planetI.getX()!= planetJ.getX()) {
+            theta = Math.atan((planetI.getY() - planetJ.getY()) / (planetI.getX() - planetJ.getX()));
+        }else{
+            theta = Math.atan((planetI.getY() - planetJ.getY()) / (planetI.getX() - planetJ.getX()+1));
+        }
+        Vector result = new Vector(magnitude, theta,true);
         return result;
     }
 

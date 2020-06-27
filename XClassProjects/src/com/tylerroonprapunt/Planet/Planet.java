@@ -7,15 +7,16 @@ public class Planet {
     private double mass;
     private double x;
     private double y;
-    private Vector velo;
+    public Vector velo;
     private Vector appliedFg;
     private Circle circle;
 
-    public Planet (double mass, double x, double y, Vector v) {
+    public Planet (double mass, double x, double y, Vector v, Circle circle) {
         this.mass = mass;
         this.x = x;
         this.y = y;
         this.velo = v;
+        this.circle = circle;
     }
 
     public double getMass() { return mass; }

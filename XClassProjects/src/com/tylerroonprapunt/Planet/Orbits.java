@@ -55,7 +55,6 @@ public class Orbits extends AbstractSimulation {
             }
             //update XY
             for (int i = 0; i < planets.size(); i++) {
-                
             }
         }
     }

@@ -23,13 +23,37 @@ public class Orbits extends AbstractSimulation {
 
     @Override
     public void reset() {
-
+        control.setValue("Starting X0", 0);
+        control.setValue("Starting Y0", 100);
+        control.setValue("Starting V0", 0);
+        control.setValue("Mass 0", 6E+24);
+        control.setValue("Starting X1", 10);
+        control.setValue("Starting Y1", 100);
+        control.setValue("Starting V1", 0);
+        control.setValue("Mass 1", 6E+24);
+        control.setValue("Starting X2", -10);
+        control.setValue("Starting Y2", 100);
+        control.setValue("Starting V2", 0);
+        control.setValue("Mass 2", 6E+24);
     }
     @Override
     public void initialize() {
-        planets.add(new Planet(6E+24, 0, 0.5*Math.pow(10,5),new Vector(3,Math.PI/2)));
-        planets.add(new Planet(6E+24, 0, -0.5*Math.pow(10,5),new Vector(3,3*Math.PI/2)));
-        planets.add(new Planet(6E+24, 1*Math.pow(10,4), 0,new Vector(3,Math.PI)));
+        planets.add(new Planet(0, 0, 0.5*Math.pow(10,5),new Vector(3,Math.PI/2), new Circle(control.getValue("Starting X0"), control.getValue("Starting Y0"))));
+        planets.add(new Planet(0, 0, -0.5*Math.pow(10,5),new Vector(3,3*Math.PI/2), new Circle(control.getValue("Starting X1"), control.getValue("Starting Y1"))));
+        planets.add(new Planet(0, 1*Math.pow(10,4), 0,new Vector(3,Math.PI), new Circle(control.getValue("Starting X2"), control.getValue("Starting Y2"))));
+
+        planets.get(0).setMass(control.getValue("Mass 1"));
+        planets.get(1).setMass(control.getValue("Mass 2"));
+        planets.get(2).setMass(control.getValue("Mass 3"));
+
+        planets.get(0).setX(control.getValue("Starting X0"));
+        planets.get(1).setX(control.getValue("Starting X1"));
+        planets.get(2).setX(control.getValue("Starting X2"));
+
+        planets.get(0).setY(control.getValue("Starting Y0"));
+        planets.get(1).setY(control.getValue("Starting Y1"));
+        planets.get(2).setY(control.getValue("Starting Y2"));
+
         timestep = 2000;
     }
     public void doStep() {
@@ -71,14 +95,14 @@ public class Orbits extends AbstractSimulation {
     public static void main(String[] args) {
         SimulationControl.createApp(new Orbits());
     }
+
+
     public static Vector fg(Planet planetI, Planet planetJ) {
         double magnitude = G*planetI.getMass()*planetJ.getMass()/distance(planetI,planetJ);
         double theta = Math.atan((planetI.getY()-planetJ.getY())/(planetI.getX()-planetJ.getX()));
         Vector result = new Vector(magnitude, theta);
         return result;
     }
-
-
 
     public static double distance(Planet planet1, Planet planet2) {
         double distance = Math.sqrt(Math.pow((planet1.getX() - planet2.getX()),2) + Math.pow((planet1.getY() - planet2.getY()),2));

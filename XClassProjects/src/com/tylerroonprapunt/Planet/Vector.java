@@ -6,14 +6,23 @@ public class Vector {
     public Vector (double x, double y) {
 
         this.setMagnitude(Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));
-        this.setTheta(simplifyAngle(Math.atan(y/x)));
+        if (x != 0){
+            this.setTheta(simplifyAngle(Math.atan(y/x)));
+        }else {
+            this.setTheta(0);
+        }
     }
     public Vector (double magnitude, double theta, boolean angle) {
         if (!angle) {
             System.exit(0);
         }
         this.magnitude = magnitude;
-        this.theta = simplifyAngle(theta);
+        if(theta !=0){
+            this.theta = simplifyAngle(theta);
+        }
+        else {
+            this.theta = theta;
+        }
     }
 
     public double getMagnitude() { return magnitude; }
@@ -28,7 +37,7 @@ public class Vector {
         return this.getMagnitude()*Math.sin(this.getTheta());
     }
     public Vector plus (Vector vector1) {
-        return new Vector (vector1.getX() + this.getX(), vector1.getY() + this.getY(), true);
+        return new Vector (vector1.getX() + this.getX(), vector1.getY() + this.getY());
     }
     public Vector clone () {
         return new Vector(this.getMagnitude(), this.getTheta());
@@ -43,11 +52,19 @@ public class Vector {
             return angle - sum;
         }
         else {
-            while (sum > angle) {
+            while (Math.abs(sum) < Math.abs(angle)) {
                 sum -= 2*Math.PI;
             }
             sum = sum + 2*Math.PI;
             return angle + sum;
         }
+    }
+
+    @Override
+    public String toString() {
+        String info = "";
+        info = info + "Mag: " + this.getMagnitude() + "\n";
+        info = info + "The: " + this.getTheta() + "\n";
+        return info;
     }
 }

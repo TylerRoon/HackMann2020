@@ -9,6 +9,15 @@ public class Planet {
     private double y;
     public Vector velo;
     private Vector appliedFg;
+
+    public Circle getCircle() {
+        return circle;
+    }
+
+    public void setCircle(Circle circle) {
+        this.circle = circle;
+    }
+
     private Circle circle;
 
     public Planet (double mass, double x, double y, Vector v, Circle circle) {
@@ -38,5 +47,13 @@ public class Planet {
     public Vector getAppliedFg() { return appliedFg; }
     public void setAppliedFg(Vector appliedFg) { this.appliedFg = appliedFg.clone(); }
 
-
+    @Override
+    public String toString() {
+        String info = "";
+        info = info + "x: " + this.getX() + "\n";
+        info = info + "y: " + this.getY() + "\n";
+        info = info + "m: " + this.getMass() + "\n";
+        info = info + this.getVelo().toString() + "\n";
+        return info;
+    }
 }

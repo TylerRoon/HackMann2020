@@ -53,7 +53,10 @@ public class Planet {
         info = info + "x: " + this.getX() + "\n";
         info = info + "y: " + this.getY() + "\n";
         info = info + "m: " + this.getMass() + "\n";
+        info = info + "Velo:";
         info = info + this.getVelo().toString() + "\n";
+        info = info + "Fg: ";
+        info = info + this.getAppliedFg().toString() + "\n";
         return info;
     }
 }

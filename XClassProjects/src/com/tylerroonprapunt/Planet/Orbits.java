@@ -31,28 +31,28 @@ public class Orbits extends AbstractSimulation {
         control.setValue("Starting Y1", 0);
         control.setValue("Starting V1", 0);
         control.setValue("Mass 1", 6E+24);
-        //control.setValue("Starting X2", -10);
-        //control.setValue("Starting Y2", 0);
-        //control.setValue("Starting V2", 0);
-        //control.setValue("Mass 2", 6E+24);
+        control.setValue("Starting X2", 1.5E+11);
+        control.setValue("Starting Y2", 1.5E+10);
+        control.setValue("Starting V2", 0);
+        control.setValue("Mass 2", 7E+22);
     }
     @Override
     public void initialize() {
         planets.add(new Planet(0, 0, 0.5*Math.pow(10,5),new Vector(0,Math.PI/2,true), new Circle(control.getDouble("Starting X0"), control.getDouble("Starting Y0"))));
         planets.add(new Planet(0, 0, -0.5*Math.pow(10,5),new Vector(30000,Math.PI/2,true), new Circle(control.getDouble("Starting X1"), control.getDouble("Starting Y1"))));
-        //planets.add(new Planet(0, 1*Math.pow(10,4), 0,new Vector(3,Math.PI,true), new Circle(control.getDouble("Starting X2"), control.getDouble("Starting Y2"))));
+        planets.add(new Planet(0, 1*Math.pow(10,4), 0,new Vector(163, 30000), new Circle(control.getDouble("Starting X2"), control.getDouble("Starting Y2"))));
 
         planets.get(0).setMass(control.getDouble("Mass 0"));
         planets.get(1).setMass(control.getDouble("Mass 1"));
-        //planets.get(2).setMass(control.getDouble("Mass 2"));
+        planets.get(2).setMass(control.getDouble("Mass 2"));
 
         planets.get(0).setX(control.getDouble("Starting X0"));
         planets.get(1).setX(control.getDouble("Starting X1"));
-        //planets.get(2).setX(control.getDouble("Starting X2"));
+        planets.get(2).setX(control.getDouble("Starting X2"));
 
         planets.get(0).setY(control.getDouble("Starting Y0"));
         planets.get(1).setY(control.getDouble("Starting Y1"));
-        //planets.get(2).setY(control.getDouble("Starting Y2"));
+        planets.get(2).setY(control.getDouble("Starting Y2"));
 
         space.setPreferredMinMax(-2E+11,2E+11,-2E+11,2E+11);
         for (int i = 0; i <planets.size() ; i++) {

@@ -12,9 +12,6 @@ import java.util.ArrayList;
 public class Orbits extends AbstractSimulation {
     PlotFrame space = new PlotFrame("x","y", "Orbit Simulation");
 
-    Circle circle1 = new Circle();
-    Circle circle2 = new Circle();
-
     public static double G = 6.67*Math.pow(10,-11);
     public double timestep;
     public static boolean updateGraph;
@@ -38,9 +35,9 @@ public class Orbits extends AbstractSimulation {
     }
     @Override
     public void initialize() {
-        planets.add(new Planet(0, 0, 0.5*Math.pow(10,5),new Vector(0,Math.PI/2,true), new Circle(control.getDouble("Starting X0"), control.getDouble("Starting Y0"))));
-        planets.add(new Planet(0, 0, -0.5*Math.pow(10,5),new Vector(30000,Math.PI/2,true), new Circle(control.getDouble("Starting X1"), control.getDouble("Starting Y1"))));
-        planets.add(new Planet(0, 1*Math.pow(10,4), 0,new Vector(163, 30000), new Circle(control.getDouble("Starting X2"), control.getDouble("Starting Y2"))));
+        planets.add(new Planet(0, 0, 0.5*Math.pow(10,5),new Vector(0,Math.PI/2,true), new Circle(control.getDouble("Starting X0"), control.getDouble("Starting Y0")), 6.96E+8));
+        planets.add(new Planet(0, 0, -0.5*Math.pow(10,5),new Vector(30000,Math.PI/2,true), new Circle(control.getDouble("Starting X1"), control.getDouble("Starting Y1")), 6.371E+6));
+        planets.add(new Planet(0, 1*Math.pow(10,4), 0,new Vector(163, 30000), new Circle(control.getDouble("Starting X2"), control.getDouble("Starting Y2")),1.7371E+6));
 
         planets.get(0).setMass(control.getDouble("Mass 0"));
         planets.get(1).setMass(control.getDouble("Mass 1"));
@@ -74,6 +71,16 @@ public class Orbits extends AbstractSimulation {
                 for (int j = 0; j < planets.size(); j++) { //planet in relation
                     if (i == j) {
                     } else {
+                        if (distance(planets.get(i),planets.get(j)) <= planets.get(i).getRad() + planets.get(j).getRad()){
+                            Vector totalMomentum = new Vector(planets.get(i).getVelo().getMagnitude() * planets.get(i).getMass(), planets.get(i).getVelo().getTheta(), true).plus(new Vector(planets.get(j).getVelo().getMagnitude() * planets.get(j).getMass(), planets.get(j).getVelo().getTheta(), true));
+                            totalMomentum.magnitude /= planets.get(i).getMass() + planets.get(j).getMass();
+                            
+                            planets.get(i).setMass(planets.get(i).getMass() + planets.get(j).getMass());
+                            planets.get(i).setVelo(totalMomentum);
+                            
+                            planets.get(j).getCircle().pixRadius = 0;
+                            planets.get(j).setMass(0);
+                        }
                         sum = sum.plus(fg(planets.get(i), planets.get(j)));
                     }
                 }
@@ -82,12 +89,14 @@ public class Orbits extends AbstractSimulation {
                 sum.setMagnitude(0);
             }
             //update XY
-            for (int i = 0; i < planets.size(); i++) {
+            for (int i = planets.size() -1 ; i >= 0; i--) {
                 Planet currentPlanet = planets.get(i);
                 Vector a = new Vector((currentPlanet.getAppliedFg().getMagnitude())/currentPlanet.getMass(),currentPlanet.getAppliedFg().getTheta(), true);
                 currentPlanet.setVelo(new Vector(currentPlanet.getVelo().clone().getX() + a.getX()*timestep, currentPlanet.getVelo().clone().getY() + a.getY()*timestep));
                 currentPlanet.visSetXY(currentPlanet.getX() + currentPlanet.getVelo().getX()*timestep,currentPlanet.getY() + currentPlanet.getVelo().getY()*timestep);
-
+                if(planets.get(i).getCircle() == null){
+                    planets.remove(i);
+                }
                 //Vector vt = currentPlanet.getVelo().plus(new Vector((currentPlanet.getAppliedFg().getMagnitude() * timestep)/currentPlanet.getMass(), currentPlanet.getAppliedFg().getTheta(), true));
                     //currentPlanet.visSetXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);
                     //currentPlanet.setXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);

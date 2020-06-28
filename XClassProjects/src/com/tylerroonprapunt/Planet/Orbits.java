@@ -6,7 +6,7 @@ import org.opensourcephysics.display.Circle;
 import org.opensourcephysics.display.DrawableShape;
 import org.opensourcephysics.display.Trail;
 import org.opensourcephysics.frames.PlotFrame;
-
+import java.util.Random;
 import java.util.ArrayList;
 
 public class Orbits extends AbstractSimulation {
@@ -38,28 +38,19 @@ public class Orbits extends AbstractSimulation {
     }
     @Override
     public void initialize() {
-        planets.add(new Planet(0, 0, 0.5*Math.pow(10,5),new Vector(0,Math.PI/2,true), new Circle(control.getDouble("Starting X0"), control.getDouble("Starting Y0"))));
-        planets.add(new Planet(0, 0, -0.5*Math.pow(10,5),new Vector(30000,Math.PI/2,true), new Circle(control.getDouble("Starting X1"), control.getDouble("Starting Y1"))));
-        planets.add(new Planet(0, 1*Math.pow(10,4), 0,new Vector(163, 30000), new Circle(control.getDouble("Starting X2"), control.getDouble("Starting Y2"))));
-
-        planets.get(0).setMass(control.getDouble("Mass 0"));
-        planets.get(1).setMass(control.getDouble("Mass 1"));
-        planets.get(2).setMass(control.getDouble("Mass 2"));
-
-        planets.get(0).setX(control.getDouble("Starting X0"));
-        planets.get(1).setX(control.getDouble("Starting X1"));
-        planets.get(2).setX(control.getDouble("Starting X2"));
-
-        planets.get(0).setY(control.getDouble("Starting Y0"));
-        planets.get(1).setY(control.getDouble("Starting Y1"));
-        planets.get(2).setY(control.getDouble("Starting Y2"));
-
+        space.clearDrawables();
+        Random gen = new Random();
+        for (int i = 0; i < 100 ; i++) {
+            double x = gen.nextInt(10)*5E+10-1E+11;
+            double y = gen.nextInt(10)*5E+10-1E+11;
+            planets.add(new Planet(5E+30,x ,y,new Vector(0,0),new Circle(x,y)));
+            }
         space.setPreferredMinMax(-2E+11,2E+11,-2E+11,2E+11);
         for (int i = 0; i <planets.size() ; i++) {
             space.addDrawable(planets.get(i).getCircle());
         }
 
-        timestep = 20000;
+        timestep = 2000;
     }
     public void doStep() {
         for(int n = 0; n < 10; n++) {
@@ -87,13 +78,19 @@ public class Orbits extends AbstractSimulation {
                 Vector a = new Vector((currentPlanet.getAppliedFg().getMagnitude())/currentPlanet.getMass(),currentPlanet.getAppliedFg().getTheta(), true);
                 currentPlanet.setVelo(new Vector(currentPlanet.getVelo().clone().getX() + a.getX()*timestep, currentPlanet.getVelo().clone().getY() + a.getY()*timestep));
                 currentPlanet.visSetXY(currentPlanet.getX() + currentPlanet.getVelo().getX()*timestep,currentPlanet.getY() + currentPlanet.getVelo().getY()*timestep);
-
-                //Vector vt = currentPlanet.getVelo().plus(new Vector((currentPlanet.getAppliedFg().getMagnitude() * timestep)/currentPlanet.getMass(), currentPlanet.getAppliedFg().getTheta(), true));
-                    //currentPlanet.visSetXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);
-                    //currentPlanet.setXY(currentPlanet.getX() + (currentPlanet.velo.getX() + vt.getX()) * timestep * .5, currentPlanet.getY() + (currentPlanet.velo.getY() + vt.getY()) * timestep * .5);
-                //currentPlanet.velo = vt.clone();
             }
         }
+        double xMax = 0;
+        double yMax = 0;
+        for (int i = 0; i <planets.size() ; i++) {
+            if (planets.get(i).getY()>yMax){
+                yMax = planets.get(i).getY();
+            }
+            if (planets.get(i).getX() > xMax){
+                xMax = planets.get(i).getX();
+            }
+        }
+        space.setPreferredMinMax(-2*xMax,2*xMax,-2*yMax,2*yMax);
     }
     @Override
     public void stop() { }

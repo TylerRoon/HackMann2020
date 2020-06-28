@@ -1,12 +1,12 @@
 package XClassProjects.src.com.tylerroonprapunt.Planet;
 import org.opensourcephysics.display.*;
 
-
-
 public class Planet {
     private double mass;
     private double x;
     private double y;
+
+    private double rad;
     public Vector velo;
     private Vector appliedFg;
 
@@ -20,12 +20,13 @@ public class Planet {
 
     private Circle circle;
 
-    public Planet (double mass, double x, double y, Vector v, Circle circle) {
+    public Planet (double mass, double x, double y, Vector v, Circle circle, double rad) {
         this.mass = mass;
         this.x = x;
         this.y = y;
         this.velo = v;
         this.circle = circle;
+        this.rad = rad;
     }
 
     public double getMass() { return mass; }
@@ -34,6 +35,8 @@ public class Planet {
     public void setX(double x) { this.x = x; }
     public double getY() { return y; }
     public void setY(double y) { this.y = y; }
+    public double getRad() {return rad;}
+    public void setRad(double rad) {this.rad = rad;}
     public void setXY(double x, double y){
         this.x = x;
         this.y = y;

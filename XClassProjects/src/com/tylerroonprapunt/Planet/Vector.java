@@ -1,7 +1,7 @@
 package XClassProjects.src.com.tylerroonprapunt.Planet;
 
 public class Vector {
-    private double magnitude;
+    public double magnitude;
     private double theta;
     public Vector (double x, double y) {
         this.setMagnitude(Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));

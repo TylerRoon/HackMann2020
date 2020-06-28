@@ -1,4 +1,4 @@
-package XClassProjects.src.com.tylerroonprapunt.Planet;
+package HackMann2020.src.com.tylerroonprapunt.Planet;
 
 public class Vector {
     public double magnitude;

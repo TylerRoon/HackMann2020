@@ -1,4 +1,4 @@
-package XClassProjects.src.com.tylerroonprapunt.Planet;
+package HackMann2020.src.com.tylerroonprapunt.Planet;
 
 import org.opensourcephysics.controls.AbstractSimulation;
 import org.opensourcephysics.controls.SimulationControl;

@@ -4,15 +4,18 @@ public class Vector {
     private double magnitude;
     private double theta;
     public Vector (double x, double y) {
-        if( x > 0){
-            this.setMagnitude(Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));
-        }else {
-            this.setMagnitude(-Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));
-        }
+        this.setMagnitude(Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));
         if (x != 0){
-            this.setTheta(simplifyAngle(Math.atan(y/x)));
-        }else {
+            if (x<0){
+                this.setTheta(simplifyAngle(Math.atan(y/x))+Math.PI);
+            }
+            else {
+                this.setTheta(simplifyAngle(Math.atan(y/x)));
+            }
+        }else if(y >0) {
             this.setTheta(Math.PI/2);
+        }else {
+            this.setTheta(-Math.PI/2);
         }
     }
     public Vector (double magnitude, double theta, boolean angle) {
@@ -43,7 +46,7 @@ public class Vector {
         return new Vector (vector1.getX() + this.getX(), vector1.getY() + this.getY());
     }
     public Vector clone () {
-        return new Vector(this.getMagnitude(), this.getTheta());
+        return new Vector(this.getMagnitude(), this.getTheta(),true);
     }
     public static double simplifyAngle(double angle){
         double sum = 0;

@@ -1,15 +1,16 @@
 package XClassProjects.src.com.tylerroonprapunt.Planet;
 import org.opensourcephysics.display.*;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 public class Planet {
     private double mass;
     private double x;
     private double y;
-
     private double rad;
     public Vector velo;
     private Vector appliedFg;
-
     public Circle getCircle() {
         return circle;
     }
